@@ -49,6 +49,50 @@ def c2k(celsius): # celsius to kelvin converter
     celsius = float(celsius)
     kelvin = celsius + 273.15
     return(kelvin)
+def tempConverter(given,givenUnit='c',findUnit='k'):
+    """tempConverter converts the numerical value of its first argument with asssociated units from the second argument
+    into a corresponding output depending upon the desired unit of measurement specified in the third argument
+    ARGUMENTS:
+        given - a float reperesenting the numerical value of the given temperature
+        givenUnit - a one-letter string reperesenting units of either celsius, farenheit, or kelvin for the data to convert
+            (defaults to celsius)
+        findUnit - a one-letter string reperesenting units of either celsius, farenheit, or kelvin for the desired output
+            (defaults to kelvin)"""
+    if given != float(given): # ensures the given data is a mathematically intelligible number
+        print('Please input a valid float to be converted.')
+        return('ERROR')
+    else:
+        given = float(given) # enforces float data type on input to prevent typeErrors later if it is an integer
+    givenUnit = str(givenUnit).lower()
+    findUnit = str(findUnit).lower()
+    valid = ('c','f','k')
+    if len(givenUnit) != 1 or len(findUnit) != 1 or givenUnit not in valid or findUnit not in valid: # checks for bad units
+        print(f'Please use only one of the following as inputs: {valid}')
+        return('ERROR')
+    elif givenUnit == findUnit: # there is no conversion of units, so just returns original input
+        return(given)
+    match givenUnit: # checks the given units
+        case 'c': # input is in degrees celsius
+            match findUnit: # finds unit to convert to
+                case 'f': # convert celsius to farenheit
+                    return(c2f(given))
+                case 'k': # convert celsius to kelvin
+                    return(c2k(given))
+        case 'f': # input is in degrees farenheit
+            match findUnit: # finds unit to convert to
+                case 'c': # convert farenheit to celsius
+                    return(f2c(given))
+                case 'k': # convert farenheit to kelvin
+                    celsius = f2c(given)
+                    return(c2k(celsius))
+        case 'k': # input is in degrees kelvin
+            match findUnit: # finds unit to convert to
+                case 'c': # convert kelvin to celsius
+                    return(k2c(given))
+                case 'f': # convert kelvin to farenheit
+                    celsius = k2c(given)
+                    return(c2f(celsius))
+print(tempConverter(32,'f','k'))
 
 # The following lines of code focus on data for each element of the periodic table
 def newElement(z): # improved version of elementInfo using the csv module and dictReader
@@ -71,7 +115,7 @@ def newElement(z): # improved version of elementInfo using the csv module and di
             if int(line['AtomicNumber']) == z: # checks if the current line is the target element
                 return(line) # returns a dictionary of data about the element
 def dict_printer(dictin):
-    """dict_printer takes the values of each pair in a dictionary and prints them out on new lines.
+    """dict_printer takes the values of each pair in a dictionary and prints them out on new lines with resizing justification.
     ARGUMENTS:
         dictin: any dictionary
     RETURNS:
@@ -100,4 +144,3 @@ def dict_printer(dictin):
                 newstring = str(letter)
         zeroCount = maxLength - len(newstring)+1 # calculates the nu,ber of spaces to be added for alignment, less one for the later space
         print(' '*zeroCount + f'{newstring}:'+ ' ' +f'{dictin[item]}') # prints the dict pair all nice and pretty-like and in line with all others
-dict_printer(newElement(117))
