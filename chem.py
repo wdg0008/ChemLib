@@ -25,28 +25,16 @@ def c2k(celsius):
     celsius = float(celsius)
     kelvin = celsius + 273.15
     return(celsius)
-def csvSplit(line):
-    line = line.strip() # removes excess whitespace
-    lineList = line.split(',') # seperates the values in the lines delimited by commas into a list
-    return(lineList)
-def elementInfo(z):
-    z=int(z)
-    if z < 1 or z > 120: # not a valid atomic number
-        return(-1) # error
-    file = open('PubChemElements_all.csv','r',encoding='utf-8')
-    headerRead = False # Bool for seperating header labels
-    for line in file: # Executes once for each line in the file
-        if headerRead: # executes if the header has already been stored
-            if int(csvSplit(line)[0])==z: # executes if the atomic number of the entry is identical to that specified at function call
-                data = csvSplit(line)
-                break
-        else: # executes if the header has not been read
-            headerList = csvSplit(line)
-            headerRead = True
-    info = dict() # create empty dictionary to hold 
-    for i in range(0,len(data)):
-        print(i)
-        info.update((headerList[i],data[i]))
-    print(info)
-    return(data)
-elementInfo(6)
+def newElement(z): # improved version of elementInfo using the csv module and dictReader
+    """Takes the atomic number of an atom as input and returns data about it in a dictionary."""
+    import csv # needed to eeficiently parse the data file
+    z = int(z) # enforces data type
+    if z < 1 or z > 118: # checks for validity of atomic number
+        print(f'"{z}" is not a valid atomic number. Please check your code.')
+        return(-1) # ends and signifies an error
+    with open('PubChemElements_all.csv','r',encoding='utf-8') as dataFile: # automatically manages opening, closing, and accessing file
+        csv_reader = csv.DictReader(dataFile) # reads each line of the csv file as a dictionary keyed to the header
+        for line in csv_reader: # repeats for each line in the file after the first one
+            if int(line['AtomicNumber']) == z: # checks if the current line is the target element
+                return(line) # returns a dictionary of data about the element
+print(newElement(117))
