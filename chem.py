@@ -51,7 +51,8 @@ def c2k(celsius): # celsius to kelvin converter
     return(kelvin)
 def tempConverter(given,givenUnit='c',findUnit='k'):
     """tempConverter converts the numerical value of its first argument with asssociated units from the second argument
-    into a corresponding output depending upon the desired unit of measurement specified in the third argument
+    into a corresponding output depending upon the desired unit of measurement specified in the third argument.
+    By default, it will assume conversion from degrees celsius to kelvin.
     ARGUMENTS:
         given - a float reperesenting the numerical value of the given temperature
         givenUnit - a one-letter string reperesenting units of either celsius, farenheit, or kelvin for the data to convert
@@ -114,7 +115,8 @@ def newElement(z): # improved version of elementInfo using the csv module and di
         for line in csv_reader: # repeats for each line in the file after the first one
             if int(line['AtomicNumber']) == z: # checks if the current line is the target element
                 return(line) # returns a dictionary of data about the element
-def dict_printer(dictin):
+
+def dict_printer(dictin): # a cool function to print dictionaries without weird misalignment
     """dict_printer takes the values of each pair in a dictionary and prints them out on new lines with resizing justification.
     ARGUMENTS:
         dictin: any dictionary
