@@ -25,8 +25,28 @@ def c2k(celsius):
     celsius = float(celsius)
     kelvin = celsius + 273.15
     return(celsius)
-file = open('scratch.txt','w')
-for i in range(1,121):
-    file.write(str(i)+'\n')
-file.close()
-# https://inventwithpython.com/bigbookpython/project53.html
+def csvSplit(line):
+    line = line.strip() # removes excess whitespace
+    lineList = line.split(',') # seperates the values in the lines delimited by commas into a list
+    return(lineList)
+def elementInfo(z):
+    z=int(z)
+    if z < 1 or z > 120: # not a valid atomic number
+        return(-1) # error
+    file = open('PubChemElements_all.csv','r',encoding='utf-8')
+    headerRead = False # Bool for seperating header labels
+    for line in file: # Executes once for each line in the file
+        if headerRead: # executes if the header has already been stored
+            if int(csvSplit(line)[0])==z: # executes if the atomic number of the entry is identical to that specified at function call
+                data = csvSplit(line)
+                break
+        else: # executes if the header has not been read
+            headerList = csvSplit(line)
+            headerRead = True
+    info = dict() # create empty dictionary to hold 
+    for i in range(0,len(data)):
+        print(i)
+        info.update((headerList[i],data[i]))
+    print(info)
+    return(data)
+elementInfo(6)
