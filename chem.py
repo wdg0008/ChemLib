@@ -115,6 +115,7 @@ def newElement(z): # improved version of elementInfo using the csv module and di
             if int(line['AtomicNumber']) == z: # checks if the current line is the target element
                 return(line) # returns a dictionary of data about the element
 
+# the following functions have to do with dictionaries
 def dict_printer(dictin): # a cool function to print dictionaries without weird misalignment
     """dict_printer takes the values of each pair in a dictionary and prints them out on new lines with resizing justification.
     ARGUMENTS:
@@ -143,9 +144,30 @@ def dict_printer(dictin): # a cool function to print dictionaries without weird 
                     newstring = newstring + letter
             else:
                 newstring = str(letter)
-        zeroCount = maxLength - len(newstring)+1 # calculates the nu,ber of spaces to be added for alignment, less one for the later space
+        zeroCount = maxLength - len(newstring)+1 # calculates the number of spaces to be added for alignment, less one for the later space
         print(' '*zeroCount + f'{newstring}:'+ ' ' +f'{dictin[item]}') # prints the dict pair all nice and pretty-like and in line with all others
 
+def dictFill(list):
+    """dictFill returns a dictionary with the input list as keys and user-specified inputs as their values.
+    Press enter once you have typed in the appropriate value to save it and begin typing the next one.
+    ARGUMENTS:
+        list - a list of strings or numbers to use as the keys of a dictionary
+    RETURNS:
+        dictionary - contains keys from the list and values input by the user
+    OUTPUTS:
+        instructions on what to do and the key that the data will currently be entered to"""
+    dictionary = dict()
+    maxLength = int() # initializes length checker to align text
+    for item in list:
+        if len(item) > maxLength:
+            maxLength = len(item)
+    print('Please enter the data values corresponding to each item below.')
+    for item in list:
+        spaceCount = maxLength - len(item)+1 # calculates the number of spaces to be added for alignment, less one for the later space
+        dictionary[item] = float(input(' '*spaceCount + f'{item}: '))
+    return(dictionary)
+
+# The following lines of code pertain to the ideal gas law and asume usage of units specified in the constant function
 def constant(name): # function that return the value of different constants for later equations
     """constant(name) will return eihter the planck constant, ideal gas constant, speed of light, or an error.
     ARGUMENTS:
@@ -174,3 +196,94 @@ def constant(name): # function that return the value of different constants for 
                     return(6.626*10**(-34)) # joule seconds
                 case 2: # speed of light
                     return(3*10**8) # meters per second
+
+# these functions solve for a certain value of an ideal gas given all others
+def solvePressure(gas): # takes dictionary with values for gas as input
+    """solvePressure - solves for the pressure of an ideal gas given its other properties.
+    ARGUMENTS:
+        gas - a dictionary containing data about the gas with the following structure:
+            gas = {
+                'temperature':float,
+                'volume':float,
+                'amount':float
+                }
+    RETURNS:
+        gas - same dictionary, but now with new/corrected pressure data
+    OUTPUTS:
+        NONE
+    DEPENDENCIES:
+        chem.constant"""
+    # uncomment the following line if issues with dependencies
+    # from chem import constant
+    if dict(gas) != gas:
+        print('This method may only be called on a dictionary object.')
+        return(-1)
+    gas['pressure'] = gas['amount']*constant('r')*gas['temperature']/gas['volume']
+    return(gas)
+def solveVolume(gas): # takes dictionary with values for gas as input
+    """solveVolume - solves for the volume of an ideal gas given its other properties.
+    ARGUMENTS:
+        gas - a dictionary containing data about the gas with the following structure:
+            gas = {
+                'temperature':float,
+                'pressure':float,
+                'amount':float
+                }
+    RETURNS:
+        gas - same dictionary, but now with new/corrected volume data
+    OUTPUTS:
+        NONE
+    DEPENDENCIES:
+        chem.constant"""
+    # uncomment the following line if issues with dependencies
+    # from chem import constant
+    if dict(gas) != gas:
+        print('This method may only be called on a dictionary object.')
+        return(-1)
+    gas['volume'] = gas['amount']*gas['temperature']*constant('r')/gas['pressure']
+    return(gas)
+def solveAmount(gas): # takes dictionary with values for gas as input
+    """solveAmount - solves for the amount of an ideal gas given its other properties.
+    ARGUMENTS:
+        gas - a dictionary containing data about the gas with the following structure:
+            gas = {
+                'temperature':float,
+                'volume':float,
+                'pressure':float
+                }
+    RETURNS:
+        gas - same dictionary, but now with new/corrected amount data
+    OUTPUTS:
+        NONE
+    DEPENDENCIES:
+        chem.constant"""
+    # uncomment the following line if issues with dependencies
+    # from chem import constant
+    if dict(gas) != gas:
+        print('This method may only be called on a dictionary object.')
+        return(-1)
+    gas['amount'] = (gas['pressure']*gas['volume'])/(constant('r')*gas['temperature'])
+    return(gas)
+def solveTemperature(gas): # takes dictionary with values for gas as input
+    """solvePressure - solves for the temperature of an ideal gas given its other properties.
+    ARGUMENTS:
+        gas - a dictionary containing data about the gas with the following structure:
+            gas = {
+                'pressure':float,
+                'volume':float,
+                'amount':float
+                }
+    RETURNS:
+        gas - same dictionary, but now with new/corrected temperature data
+    OUTPUTS:
+        NONE
+    DEPENDENCIES:
+        chem.constant"""
+    # uncomment the following line if issues with dependencies
+    # from chem import constant
+    if dict(gas) != gas:
+        print('This method may only be called on a dictionary object.')
+        return(-1)
+    gas['temperature'] = (gas['pressure']*gas['volume'])/(constant('r')*gas['amount'])
+    return(gas)
+dict_printer(solveTemperature(dictFill(['pressure','volume','amount'])))
