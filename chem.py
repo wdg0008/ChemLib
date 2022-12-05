@@ -93,7 +93,6 @@ def tempConverter(given,givenUnit='c',findUnit='k'):
                 case 'f': # convert kelvin to farenheit
                     celsius = k2c(given)
                     return(c2f(celsius))
-print(tempConverter(32,'f','k'))
 
 # The following lines of code focus on data for each element of the periodic table
 def newElement(z): # improved version of elementInfo using the csv module and dictReader
@@ -146,3 +145,32 @@ def dict_printer(dictin): # a cool function to print dictionaries without weird 
                 newstring = str(letter)
         zeroCount = maxLength - len(newstring)+1 # calculates the nu,ber of spaces to be added for alignment, less one for the later space
         print(' '*zeroCount + f'{newstring}:'+ ' ' +f'{dictin[item]}') # prints the dict pair all nice and pretty-like and in line with all others
+
+def constant(name): # function that return the value of different constants for later equations
+    """constant(name) will return eihter the planck constant, ideal gas constant, speed of light, or an error.
+    ARGUMENTS:
+        name - a one-letter string of either 'r', 'h', or 'c'
+    OUTPUTS:
+        Help messages corresponding to different forms of invalid input
+    RETURNS:
+        A float reperesenting one of the following:
+        1. The ideal gas constant in (L*atm)/(mol*K)
+        2. The planck constant in (J*s)
+        3. The speed of light in (m/s)"""
+    constants = ('r','h','c')
+    if str(name) != name:
+        print('Please only input a string.')
+        return(-1)
+    else:
+        name = str(name) # forces string type
+        if name not in constants: # input invalid
+            print(f'Only the following are valid arguments: {constants}')
+            return(-1)
+        else: # the input is valid
+            match constants.index(name): # finds index of argument in tuple of valid inputs
+                case 0: # ideal gas law constant
+                    return(0.0821) # liters times atmospheres per mol times kelvin
+                case 1: # planck constant
+                    return(6.626*10**(-34)) # joule seconds
+                case 2: # speed of light
+                    return(3*10**8) # meters per second

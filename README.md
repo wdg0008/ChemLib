@@ -1,5 +1,6 @@
 # ChemLib
  Useful tools for General Chemistry I written in Python so that I can review two finals at once.
+ **Requires Python 3.10 or higher**
  ## chem.py
  A module I am building that converts temperatures, lists data from the periodic table for each element, and has a cool dictionary printer that auto-aligns its output.
  ## PubChemElements_all.csv
